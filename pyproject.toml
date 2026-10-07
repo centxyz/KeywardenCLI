@@ -1,0 +1,18 @@
+[project]
+name = "keywarden-cli"
+version = "1.0.0"
+description = "A local encrypted credential vault with atomic storage and safe secret display"
+requires-python = ">=3.9"
+dependencies = ["cryptography>=42,<51"]
+license = "MIT"
+authors = [{ name = "cent" }]
+
+[project.scripts]
+keywarden = "keywarden:main"
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["keywarden"]
