@@ -1,38 +1,39 @@
 # AgentVault
 
-**AgentVault** is a lightweight, open‑source password vault designed for field agents and security professionals. It stores credentials securely using symmetric encryption and provides a simple command‑line interface.
+AgentVault is a local encrypted credential-store CLI. It derives a Fernet encryption key from a master password with PBKDF2 and stores the encrypted vault under `~/.agentvault`.
 
-## Features
-- AES‑256 encryption with Fernet (cryptography library)
-- Add, retrieve, list, and delete entries
-- Master password‑derived key (PBKDF2)
-- JSON‑based storage (encrypted on disk)
-- Cross‑platform (Windows, macOS, Linux)
+## Install
 
-## Installation
 ```bash
-git clone https://github.com/yourname/AgentVault.git
+git clone https://github.com/centxyz/AgentVault.git
 cd AgentVault
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
 ## Usage
+
 ```bash
-# Initialize vault (creates vault.json)
 python main.py init
-
-# Add a new credential
-python main.py add --service "AlphaOps" --username "agent007" --password "s3cr3t!"
-
-# Retrieve a credential
-python main.py get --service "AlphaOps"
-
-# List all stored services
+python main.py add --service example --username agent
+python main.py get --service example
 python main.py list
-
-# Delete a credential
-python main.py delete --service "AlphaOps"
+python main.py delete --service example
 ```
 
+Omit `--password` when adding an entry to receive a hidden password prompt. Supplying it on the command line is supported for automation but may expose it through shell history or process listings.
+
+## Test
+
+```bash
+python -m unittest -v
+```
+
+## Security scope
+
+AgentVault protects the vault at rest. It is not a system keychain, does not prevent compromise while unlocked, and has not received a professional security audit.
+
 ## License
-MIT License – feel free to modify and distribute.
+
+MIT
