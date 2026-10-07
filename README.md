@@ -54,3 +54,9 @@ The suite verifies encryption, restrictive permissions, incorrect-password handl
 ## License
 
 MIT © cent
+
+## Current limitations
+
+- The vault cannot protect secrets on a compromised machine or from a process that captures the master password.
+- It is not integrated with the operating-system keychain or hardware-backed storage.
+- The project has not received a professional security audit.
