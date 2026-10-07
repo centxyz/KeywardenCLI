@@ -1,5 +1,7 @@
 # KeywardenCLI
 
+[![CI](https://github.com/centxyz/KeywardenCLI/actions/workflows/ci.yml/badge.svg)](https://github.com/centxyz/KeywardenCLI/actions/workflows/ci.yml)
+
 KeywardenCLI is a local encrypted credential vault. It stores named usernames and passwords in one versioned encrypted file, derives its encryption key from a master password, writes updates atomically, and hides secrets unless they are explicitly requested.
 
 ## Security properties
