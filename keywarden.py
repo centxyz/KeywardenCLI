@@ -80,14 +80,16 @@ class VaultStore:
         self.path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
         descriptor, temporary = tempfile.mkstemp(prefix=".vault-", dir=self.path.parent)
         try:
-            os.fchmod(descriptor, 0o600)
+            if os.name == 'posix':
+                os.fchmod(descriptor, 0o600)
             with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
                 json.dump(document, handle, indent=2)
                 handle.write("\n")
                 handle.flush()
                 os.fsync(handle.fileno())
             os.replace(temporary, self.path)
-            os.chmod(self.path, 0o600)
+            if os.name == 'posix':
+                os.chmod(self.path, 0o600)
         except Exception:
             try:
                 os.unlink(temporary)

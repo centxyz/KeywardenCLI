@@ -1,4 +1,5 @@
 import json
+import os
 import stat
 import tempfile
 import unittest
@@ -24,7 +25,8 @@ class KeywardenTests(unittest.TestCase):
         self.store.save(entries, "correct horse battery staple")
         self.assertEqual(self.store.unlock("correct horse battery staple"), entries)
         self.assertNotIn("secret", self.path.read_text())
-        self.assertEqual(stat.S_IMODE(self.path.stat().st_mode), 0o600)
+        if os.name == 'posix':
+            self.assertEqual(stat.S_IMODE(self.path.stat().st_mode), 0o600)
 
     def test_wrong_password_is_rejected(self):
         with self.assertRaisesRegex(keywarden.VaultError, "Invalid master password"):
@@ -48,6 +50,13 @@ class KeywardenTests(unittest.TestCase):
         self.assertEqual(len(keywarden.generate_password(32)), 32)
         with self.assertRaises(keywarden.VaultError):
             keywarden.generate_password(8)
+
+    def test_windows_write_does_not_require_posix_permission_calls(self):
+        with patch.object(keywarden.os, 'name', 'nt'), \
+             patch.object(keywarden.os, 'fchmod', create=True, side_effect=AssertionError('POSIX only')), \
+             patch.object(keywarden.os, 'chmod', side_effect=AssertionError('POSIX only')):
+            self.store.save({'example': {'username': 'cent', 'password': 'secret'}}, 'correct horse battery staple')
+            self.assertEqual(self.store.unlock('correct horse battery staple')['example']['password'], 'secret')
 
 
 if __name__ == "__main__":
