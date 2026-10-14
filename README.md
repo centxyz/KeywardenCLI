@@ -9,7 +9,7 @@ KeywardenCLI is a local encrypted credential vault. It stores named usernames an
 - Fernet authenticated encryption
 - PBKDF2-HMAC-SHA256 with 600,000 iterations and a random 128-bit salt
 - Salt rotation when changing the master password
-- Atomic file replacement and `0600` vault permissions
+- Atomic file replacement and `0600` vault permissions on POSIX systems
 - No key, master password, or plaintext credential written to disk
 - Secret output hidden unless `get --show` is used
 - Cryptographically secure password generation
@@ -27,6 +27,18 @@ pip install .
 ```
 
 ## Usage
+
+Windows PowerShell installation:
+
+```powershell
+git clone https://github.com/centxyz/KeywardenCLI.git
+cd KeywardenCLI
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install .
+.\.venv\Scripts\keywarden.exe init
+```
+
+On Windows, run commands using `.\.venv\Scripts\keywarden.exe` without activating the environment. Vault access follows Windows filesystem ACLs; POSIX `0600` permissions are not a Windows access-control guarantee. Store the vault in a private user directory and restrict its ACLs using your normal Windows administration tools.
 
 ```bash
 keywarden init
